@@ -1,5 +1,12 @@
 package br.edu.ifba.inf011.model.playlist;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import br.edu.ifba.inf011.model.comercial.Pacote;
+
 public class NameReportVisitor implements PlaylistVisitor{
 	private List<String> nomes = new ArrayList<>();
     private Map<String, Integer> contagemPorTipo = new HashMap<>();
@@ -22,7 +29,7 @@ public class NameReportVisitor implements PlaylistVisitor{
     
     @Override
     public void visit(Pacote pacote) {
-        nomes.add("📦 " + pacote.getNome() + " (" + pacote.getTotalProdutos() + " itens)");
+        nomes.add( pacote.getNome() + " (" + pacote.getTotalProdutos() + " itens)");
         contagemPorTipo.merge("Pacote", 1, Integer::sum);
         totalItens++;
     }
@@ -53,4 +60,6 @@ public class NameReportVisitor implements PlaylistVisitor{
         }
         return sb.toString();
     }
+
+
 }
