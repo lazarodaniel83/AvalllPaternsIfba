@@ -8,18 +8,21 @@ public class Episodio implements Product{
     private Double preco;
     private Timeline timeline;
     private Integer numero;
+    private String serieTitulo;
 
-	public Episodio(String titulo, Double preco, Integer numero, Timeline timeline) {
+	public Episodio(String titulo, Double preco, Integer numero, Timeline timeline,String serieTitulo) {
     	this.titulo = titulo;
         this.preco = preco;
         this.timeline = timeline;
         this.numero = numero;
+        this.serieTitulo = serieTitulo;
 	}
 	 private Episodio(Builder builder) {
 	        this.titulo = builder.titulo;
 	        this.preco = builder.preco;
 	        this.timeline = builder.timeline;
 	        this.numero = builder.numero;
+	        this.serieTitulo = builder.serieTitulo;
 
 	    }
 	
@@ -30,6 +33,8 @@ public class Episodio implements Product{
     public Integer getDuracao() { 
     	return this.timeline.getDurationInSeconds();
     }
+    
+    public String getSerieTitulo() { return serieTitulo; }
 
 	public String getTitulo() {
 		return this.titulo;
@@ -64,9 +69,11 @@ public class Episodio implements Product{
 	        private Double preco;
 	        private Timeline timeline;
 	        private Integer numero = 1;
+	        private String serieTitulo = "Série Desconhecida";
+
 	        
 	        public Builder(String titulo, Double preco) {
-	        	if (titulo == null || titulo.trim().isEmpty()) {
+	            if (titulo == null || titulo.trim().isEmpty()) {
 	                throw new IllegalArgumentException("Título é obrigatório");
 	            }
 	            if (preco == null || preco < 0) {
@@ -94,7 +101,12 @@ public class Episodio implements Product{
 	            return this;
 	        }
 	        
-
+	        public Builder withSerieTitulo(String serieTitulo) {
+	            if (serieTitulo != null && !serieTitulo.trim().isEmpty()) {
+	                this.serieTitulo = serieTitulo;
+	            }
+	            return this;
+	        }																								
 	        
 	        public Episodio build() {
 	            if (this.timeline == null) {

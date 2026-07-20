@@ -49,7 +49,12 @@ public class Serie implements Product{
     }
     
     public List<Episodio> getEpisodios() { return Collections.unmodifiableList(episodios); }
-    public Integer getTotalEpisodios() { return episodios.size(); }
+
+    public Integer getTotalEpisodios() {
+        return temporadas.stream()
+                .mapToInt(Temporada::getTotalEpisodios)
+                .sum();
+    }
     
     public String getTitulo() {
     	return this.titulo;
@@ -64,13 +69,41 @@ public class Serie implements Product{
         return  this.episodios.stream().mapToInt(Episodio::getDuracao).sum(); 
     }    
     
-    public Integer getTemporada() {
-    	return this.temporada;
+    @Override
+    public Integer getDurationInSeconds() {
+        return temporadas.stream()
+                .mapToInt(Temporada::getDurationInSeconds)
+                .sum();
     }
     
+    public Serie addTemporada(Temporada temporada) {
+        if (temporada != null) {
+            temporadas.add(temporada);
+        }
+        return this;
+    }
+    
+    public Serie addTemporada(Integer numero, Episodio... episodios) {
+        Temporada temporada = new Temporada(numero);
+        for (Episodio ep : episodios) {
+            temporada.addEpisodio(ep);
+        }
+        temporadas.add(temporada);
+        return this;
+    }
+    
+    public List<Temporada> getTemporadas() {
+        return Collections.unmodifiableList(temporadas);
+    }
+    
+    public Integer getTotalTemporadas() {
+        return temporadas.size();
+    }
+    
+  
 
 	public String toXML() {
-		String xml = "\t<serie titulo=\"" + this.getTitulo() + "\" temporada=\"" + this.getTemporada() + "\">\n";
+		String xml = "\t<serie titulo=\"" + this.getTitulo() + "\" temporada=\"" + this.getTemporadas() + "\">\n";
 		for(Episodio episodio : this.episodios)
 			xml += episodio.toXML();
 		return xml + "\t</serie>\n";
@@ -78,43 +111,58 @@ public class Serie implements Product{
 	}
 	
 	 @Override
-	 public String getDescricao() {
+	    public String getDescricao() {
 	        StringBuilder sb = new StringBuilder();
 	        
-	       
-	        sb.append(String.format("📺 %s - %d episódios - R$ %.2f%n", 
-	                this.titulo, episodios.size(), getPreco()));
-	        sb.append("  Episódios:%n");
+	        sb.append(String.format("📺 %s - %d temporadas - %d episódios - R$ %.2f%n", 
+	                this.titulo, 
+	                temporadas.size(), 
+	                getTotalEpisodios(), 
+	                getPreco()));
 	        
-	        int show = Math.min(episodios.size(), 5);
-	        for (int i = 0; i < show; i++) {
-	            Episodio ep = episodios.get(i);
-	            // ⭐ FORMATAÇÃO CORRETA ⭐
-	            sb.append("    • S").append(String.format("%02d", ep.getTemporada()))
-	              .append("E").append(String.format("%02d", ep.getNumero()))
-	              .append(" - ").append(ep.getTitulo())
-	              .append(" (R$ ").append(String.format("%.2f", ep.getPreco()))
-	              .append(")%n");
+	        for (Temporada temp : temporadas) {
+	            sb.append(String.format("  Temporada %d (%d episódios):%n", 
+	                    temp.getNumero(), 
+	                    temp.getTotalEpisodios()));
+	            
+	            int show = Math.min(temp.getEpisodios().size(), 5);
+	            for (int i = 0; i < show; i++) {
+	                Episodio ep = temp.getEpisodios().get(i);
+	               
+	                sb.append("    • E").append(String.format("%02d", ep.getNumero()))
+	                  .append(" - ").append(ep.getTitulo())
+	                  .append(" (R$ ").append(String.format("%.2f", ep.getPreco()))
+	                  .append(")%n");
+	            }
+	            if (temp.getEpisodios().size() > 5) {
+	                sb.append("    • ... e mais ")
+	                  .append(temp.getEpisodios().size() - 5)
+	                  .append(" episódios%n");
+	            }
 	        }
-	        if (episodios.size() > 5) {
-	            // ⭐ FORMATAÇÃO CORRETA ⭐
-	            sb.append("    • ... e mais ").append(episodios.size() - 5).append(" episódios%n");
-	        }
+	        
 	        return sb.toString();
 	    }
 	
-	@Override
-	public Integer getDurationInSeconds() {
-		return episodios.stream().mapToInt(Episodio::getDurationInSeconds).sum();
-    }
+
 	
-	@Override
-	public void render(Integer init, Integer duration) {
-		 for (Episodio ep : episodios) { ep.render(init, duration); }
-		
-	}
+	 @Override
+	    public void render(Integer init, Integer duration) {
+	        for (Temporada temp : temporadas) {
+	            for (Episodio ep : temp.getEpisodios()) {
+	                ep.render(init, duration);
+	            }
+	        }
+	    }
 	@Override
 	public String getTipo() {
 		return "SERIE";
+	}
 
+	
+	
 }
+          
+	
+	
+	

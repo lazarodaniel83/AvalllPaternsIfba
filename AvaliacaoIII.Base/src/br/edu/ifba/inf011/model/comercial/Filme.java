@@ -6,16 +6,20 @@ public class Filme implements Product{
 	private String titulo;
     private Double preco;
     private Timeline timeline;
-
+    private String diretor;
+    
 	private Filme(Builder builder) {
     	this.titulo = builder.titulo;
         this.preco = builder.preco;
         this.timeline = builder.timeline;
+        this.diretor = builder.diretor;
 	}
 	
     public Double getPreco() {
     	return this.preco; 
     }
+    
+    public String getDiretor() { return diretor; }
     
     public Integer getDuracao() { 
     	return this.timeline.getDurationInSeconds();
@@ -49,6 +53,8 @@ public class Filme implements Product{
         private String titulo;
         private Double preco;
         private Timeline timeline ;
+        private String diretor = "Desconhecido";
+
               
         public Builder(String titulo, Double preco) {
         	if (titulo == null || titulo.trim().isEmpty()) {
@@ -68,6 +74,19 @@ public class Filme implements Product{
             return this;
         }
         
+        public Builder withDuration(Integer duration) {
+            if (duration != null && duration > 0) {
+                this.timeline = new Timeline(duration);
+            }
+            return this;
+        }
+        
+        public Builder withDiretor(String diretor) {
+            if (diretor != null && !diretor.trim().isEmpty()) {
+                this.diretor = diretor;
+            }
+            return this;
+        }
         
         public Filme build() {
         	 if (this.timeline == null) {

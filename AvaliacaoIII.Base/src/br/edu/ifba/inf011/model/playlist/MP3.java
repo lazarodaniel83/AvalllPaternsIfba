@@ -1,29 +1,55 @@
 package br.edu.ifba.inf011.model.playlist;
 
 public class MP3 implements PlaylistItem {
-    public String nome;
-    public double tamanhoMegaBytes;
+	private String nome;
+    private Integer duracao;
+    private Integer bitrate;
+    private String artista;
+    private String album;
 
-    public MP3(String nome, double tamanho) { 
-        this.nome = nome; 
-        this.tamanhoMegaBytes = tamanho; 
+    public MP3(String nome, Integer duracao, Integer bitrate, String artista, String album) {
+        this.nome = nome;
+        this.duracao = duracao;
+        this.bitrate = bitrate;
+        this.artista = artista;
+        this.album = album;
     }
     
-    public double getTamanhoMegaBytes() {
-    	return this.tamanhoMegaBytes;
-    }
+    
+  
 
     public String getNome() {
     	return this.nome;
     }
+    
+    @Override
+    public Integer getDurationInSeconds() { return duracao; }
 
+	
 	@Override
-	public String toXML() {
-		return "<mp3 nome=\"" + this.getNome() + "\"/>\n";
+	public void accept(PlaylistVisitor visitor) {
+		 visitor.visit(this);
+		
 	}
 
+
+	 @Override
+	    public void render(Integer init, Integer duration) {
+	        System.out.printf("[MP3] >> Reproduzindo %s do segundo %d ao %d%n", 
+	                nome, init, init + duration);
+	    }
+
+
 	@Override
-	public Double getBandwidth(Double bandPerSecond) {
-		return this.getTamanhoMegaBytes();
+	public String getTipo() {
+		 return "MP3";
 	}
+	
+	public Integer getBitrate() { return bitrate; }
+    public String getArtista() { return artista; }
+    public String getAlbum() { return album; }
+    
+    public Long getTamanhoArquivo() {
+        return (duracao.longValue() * bitrate) / 8;
+    }
 }

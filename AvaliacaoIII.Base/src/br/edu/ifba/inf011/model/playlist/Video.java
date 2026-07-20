@@ -2,36 +2,62 @@ package br.edu.ifba.inf011.model.playlist;
 
 public class Video implements PlaylistItem {
 	
-    public String nome;
-    public double tamanhoMegaBytes;
-    public String link;
+	    private String nome;
+	    private Integer duracao;
+	    private String resolucao;
+	    private Double bitrate;
+	    private String formato;
 
-    public Video(String nome, double tamanho, String link) { 
-        this.nome = nome; 
-        this.tamanhoMegaBytes = tamanho; 
-        this.link = link;
-    }
-    
-    public double getTamanhoMegaBytes() {
-    	return this.tamanhoMegaBytes;
-    }
-
+	    public Video(String nome, Integer duracao, String resolucao, Double bitrate) {
+	        this.nome = nome;
+	        this.duracao = duracao;
+	        this.resolucao = resolucao;
+	        this.bitrate = bitrate;
+	        this.formato = "MP4";
+	    }
+	    
+	    
+	    public Video(String nome, Integer duracao, String resolucao, Double bitrate, String formato) {
+	        this.nome = nome;
+	        this.duracao = duracao;
+	        this.resolucao = resolucao;
+	        this.bitrate = bitrate;
+	        this.formato = formato;
+	    }
+     
     
     public String getNome() {
     	return this.nome;
     }
+    
+    @Override
+    public String getTipo() { return "VIDEO"; }
+    
+    public String getResolucao() { return resolucao; }
+    public Double getBitrate() { return bitrate; }
+    public String getFormato() { return formato; }
+    
+    public Long getTamanhoArquivo() {
+        return (long)((bitrate * duracao) / 8);
+    }
+
 
 	@Override
-	public String toXML() {
-		return "  <video nome=\"" + this.getNome() + "\" link=\"" + this.getLink() + "\"/>\n";
-	}
-
-	private String getLink() {
-		return this.link;
+	public Integer getDurationInSeconds() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public Double getBandwidth(Double bandPerSecond) {
-		return this.getTamanhoMegaBytes();
+	public void accept(PlaylistVisitor visitor) {
+		visitor.visit(this);	
 	}
+
+	@Override
+	public void render(Integer init, Integer duration) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 }

@@ -1,8 +1,10 @@
 package br.edu.ifba.inf011.model.playlist;
 
-public interface PlaylistItem {
-	public static Double BAND_PER_SECOND = 1.5;
-	public String toXML();
-	public Double getBandwidth(Double bandPerSecond);
+import br.edu.ifba.inf011.avaliacao2.decorator.RenderableContent;
+
+public interface PlaylistItem extends RenderableContent{
+	 String getNome();
+	    void accept(PlaylistVisitor visitor);
+	    String getTipo();
 }
 
