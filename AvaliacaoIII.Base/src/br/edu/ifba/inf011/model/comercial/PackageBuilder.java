@@ -13,10 +13,7 @@ public class PackageBuilder {
     public PackageBuilder nomeado(String titulo) {
         this.titulo = titulo;
         return this;
-    }
-    
-    
-    
+    }    
     
     public PackageBuilder comDesconto(Double desconto) {
         this.desconto = desconto != null ? Math.max(0.0, Math.min(100.0, desconto)) : 0.0;
@@ -41,7 +38,7 @@ public class PackageBuilder {
                 .build());
         return this;
     }
-    
+                                         //String,  double, int, int, String)
     public PackageBuilder adicionarEpisodio(String titulo, Double preco, Integer numero, Integer temporada, String serie) {
         produtos.add(new Episodio.Builder(titulo, preco)
                 .withNumero(numero)
@@ -77,7 +74,7 @@ public class PackageBuilder {
         if (produto != null) { produtos.add(produto); }
         return this;
     }
-    
+    																// (String, int, double, int, int, String)     
     public PackageBuilder adicionarTodos(Product... produtoArray) {
         if (produtoArray != null) { Collections.addAll(produtos, produtoArray); }
         return this;

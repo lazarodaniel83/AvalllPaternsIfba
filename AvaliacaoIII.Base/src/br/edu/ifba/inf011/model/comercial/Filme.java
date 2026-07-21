@@ -7,8 +7,14 @@ public class Filme implements Product{
     private Double preco;
     private Timeline timeline;
     private String diretor;
+    //String, Double, String, double
+
+    public Filme(String titulo,Double preco, Timeline timeline) {
+    	this.titulo = titulo;
+    	this.timeline = timeline;
+    }	
     
-	private Filme(Builder builder) {
+    private Filme(Builder builder) {
     	this.titulo = builder.titulo;
         this.preco = builder.preco;
         this.timeline = builder.timeline;

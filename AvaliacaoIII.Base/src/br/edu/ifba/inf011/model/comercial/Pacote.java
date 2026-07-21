@@ -13,9 +13,10 @@ public class Pacote implements PlaylistItem,Product{
 	    private List<Product> produtos = new ArrayList<>();
 	    private Double desconto;
 	    private String tipoPacote;
+	    
 
 	    
-	    public Pacote(String titulo) {
+	    public Pacote(String titulo,List<Product> produtos ) {
 	    	this.titulo = titulo;
 	    	
 	    };

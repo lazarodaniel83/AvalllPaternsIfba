@@ -100,16 +100,7 @@ public class Serie implements Product{
         return temporadas.size();
     }
     
-  
-
-	public String toXML() {
-		String xml = "\t<serie titulo=\"" + this.getTitulo() + "\" temporada=\"" + this.getTemporadas() + "\">\n";
-		for(Episodio episodio : this.episodios)
-			xml += episodio.toXML();
-		return xml + "\t</serie>\n";
-		
-	}
-	
+ 	
 	 @Override
 	    public String getDescricao() {
 	        StringBuilder sb = new StringBuilder();
